@@ -1,0 +1,66 @@
+.cart-item{
+    font-family: 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
+    gap: 50px;
+    margin: 1rem;
+}
+.cart-container{
+    
+    display: flex; 
+    
+    width:100%;
+
+}
+.cart-container1{
+    background-color: rgb(210, 210, 217);
+    display: flex; 
+    
+    margin:0px;
+    padding:0px;
+    justify-content: space-between;
+    width:100%;
+    border-radius: 30px;
+
+}
+
+
+
+button.place-order {
+    display: block;
+    
+    padding: 10px;
+    background-color: #007bff;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 1em;
+    margin-top: 20px;
+  }
+  
+  button.place-order:hover {
+    background-color: #0056b3;
+  }
+  
+  /* Additional button styles for a smoother UI */
+  button.place-order:active {
+    background-color: #004494;
+  }
+  
+  button.place-order:focus {
+    outline: none;
+    box-shadow: 0 0 0 3px rgba(0, 123, 255, 0.5);
+  }
+  @media (max-width: 768px) {
+    .cart-container {
+      padding: 5px;
+    }
+  
+    .cart-item {
+      font-size: 0.9rem;
+    }
+  
+    .place-order {
+      font-size: 0.9rem;
+      padding: 8px 16px;
+    }
+  }

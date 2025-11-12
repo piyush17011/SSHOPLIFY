@@ -1,0 +1,108 @@
+.allp-container{
+    /* background-color: aquamarine; */
+    display: grid;
+    grid-template-columns: repeat(3,1fr);
+    grid-auto-rows: auto;
+    gap: 20px;
+}
+.card {
+    display: flex;
+
+  }
+.cart-container{
+ width: 100%;
+  }
+  
+.card-img{
+  object-fit: fill;
+  height: 450px;
+}
+.search-bar{
+  margin-top: 0.9rem;
+  margin-left: 40px;
+  width: 95%;
+}
+/* Styles for the Single Product Page */
+
+/* Container for the single product card */
+.singleCard {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 20px;
+  background-color: #f9f9f9;
+  height: calc(100vh - 70px); /* Adjust based on your navbar height */
+}
+
+/* Card styling */
+.card {
+  width: 80%;
+  max-width: 800px;
+  background-color: #ffffff;
+  border: none;
+  border-radius: 10px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  overflow: hidden;
+  transition: transform 0.3s;
+}
+
+/* Card hover effect */
+.card:hover {
+  transform: translateY(-10px);
+}
+
+/* Image styling */
+.card-img {
+  width: 100%;
+  height: auto;
+  object-fit: cover;
+  border-bottom: 1px solid #ddd;
+}
+
+/* Card body styling */
+.card-body {
+  padding: 20px;
+  text-align: left;
+}
+
+/* Card title styling */
+.card-title {
+  font-size: 24px;
+  font-weight: bold;
+  margin-bottom: 10px;
+}
+
+/* Card text styling */
+.card-text {
+  font-size: 16px;
+  color: #555;
+  margin-bottom: 20px;
+}
+
+/* Button styling */
+.button-primary {
+  background-color: #007bff;
+  border: none;
+  color: white;
+  padding: 10px 20px;
+  font-size: 16px;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: background-color 0.3s;
+}
+
+.button-primary:hover {
+  background-color: #0056b3;
+}
+
+
+
+@media (max-width: 768px) {
+  .search-bar {
+    width: 100%;
+  }
+
+  .allp-container {
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  }
+}

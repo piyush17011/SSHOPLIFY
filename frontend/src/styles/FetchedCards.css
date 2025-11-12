@@ -1,0 +1,80 @@
+.fetched-cards-container {
+  
+  display: flex;
+  overflow-x: scroll;
+  scroll-snap-type: x mandatory;
+}
+.card {
+  display: flex;
+  flex-direction: column;
+  flex: 0 0 100%;
+  scroll-snap-align: start;
+  padding: 6px 12px;
+  border-radius: 18px;
+}
+.card .card-link-wrapper {
+  margin-top: auto;
+}
+.cards::-webkit-scrollbar {
+  height: 12px;
+}
+.cards::-webkit-scrollbar-thumb,
+.cards::-webkit-scrollbar-track {
+  border-radius: 92px;
+}
+.card-img{
+  object-fit: fill;
+  height: 450px;
+}
+
+@media (min-width: 500px) {
+  .card {
+    flex-basis: calc(50% - 10px);
+  }
+  .card:not(:last-child) {
+    margin-right: 20px;
+  }
+}
+@media (min-width: 700px) {
+  .card {
+    flex-basis: calc(calc(100% / 3) - 20px);
+  }
+  .card:not(:last-child) {
+    margin-right: 30px;
+  }
+}
+@media (min-width: 1100px) {
+  .card {
+    flex-basis: calc(25% - 30px);
+  }
+  .card:not(:last-child) {
+    margin-right: 40px;
+  }
+}
+/* Styles for the FetchedTSCards component */
+
+.fetched-cards-container {
+  margin-top: 20px;
+}
+
+.card {
+  cursor: pointer;
+}
+
+.card-img {
+  object-fit: cover;
+  height: 300px;
+}
+
+@media (max-width: 768px) {
+  .card-img {
+    height: 200px;
+  }
+}
+
+@media (max-width: 576px) {
+  .card-img {
+    height: 150px;
+  }
+}
+

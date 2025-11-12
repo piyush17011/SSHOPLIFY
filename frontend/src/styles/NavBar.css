@@ -1,0 +1,61 @@
+.main-nav{
+    background-color: #e8e9ee;
+    padding:0px;
+    height:6vh;
+    box-shadow: 0 2px 4px 0 rgba(0,0,0,.2);
+}
+.nav-text{
+    text-decoration: none;
+    color:rgb(0, 0, 0);
+    font-weight: 800;
+}
+.nav-text:hover{
+    border-bottom:4px solid #120a0a ;
+    font-weight: 800;
+}
+.nav-logo-text{
+    color :black;
+    font-weight : 1000;
+}
+
+.nav-login-button{
+    float : right;
+
+}
+/* //cart */
+.cart-icon{
+    font-size: 30px;
+}
+/* single product page  */
+.singleCard{
+    width: auto;
+    display: grid;
+    justify-content: center;
+    
+}
+/* Responsive design */
+@media (max-width: 768px) {
+    .nav-link {
+      display: block;
+      padding: 12px;
+      text-align: center;
+    }
+  
+    .nav-button {
+      width: 100%;
+      margin: 8px 0;
+    }
+    .hide{
+        display: none;
+    }
+  
+    .nav-username {
+      width: 100%;
+      text-align: center;
+      margin: 8px 0;
+    }
+  
+    .cart-icon {
+      font-size: 1.5rem;
+    }
+  }

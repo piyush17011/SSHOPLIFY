@@ -1,0 +1,58 @@
+1.npm init --> to initialize package.json
+2.create index.js with console.log("hello world")  --> to run this node ./index.js
+3.inorder to avoid  run again and again use nodemon --> npm install -g nodemon //g is for global
+4.now we can use nodemon ./index.js --> now we just save the file and it will update itself and give the output after every save
+5.to create server : we can use http module inbuilt in node --> const http = require("http")
+6.//console.log(http)         //display all available functions like create server
+
+7. basic server code:
+const server= http.createServer((req,res)=>{  //if kept empty the page loads infinetly so use end
+ if(req.url === "/"){
+    res.end("<h1>HOME PAGE</h1>")
+ }
+ else if(req.url === "/about"){
+    res.end("<h1>ABOUT PAGE</h1>")
+ }
+ else if(req.url === "/contact"){
+    res.end("<h1>CONTACT PAGE</h1>")
+ }
+ else{
+    res.end("<h1>PAGE NOT FOUND</h1>")
+ }
+    
+})
+
+8.WHOLE CODE FOR SERVER USING NODE :
+   index.js:
+   
+const http = require("http")
+//console.log(http)         //display all available functions like create 
+const server= http.createServer((req,res)=>{  //if kept empty the page loads infinetly so use end
+ if(req.url === "/"){
+    res.end("<h1>HOME PAGE</h1>")
+ }
+ else if(req.url === "/about"){
+    res.end("<h1>ABOUT PAGE</h1>")
+ }
+ else if(req.url === "/contact"){
+    res.end("<h1>CONTACT PAGE</h1>")
+ }
+ else{
+    res.end("<h1>PAGE NOT FOUND</h1>")
+ }
+    
+})
+server.listen(5000,()=>{
+console.log("Server is running...")
+})
+hg
+
+9.Express :
+for modern syntax we add "type" : "module" in package.json --> for older syntax "commonjs"
+npm install express  --> creates node_modules folder and get added to package.json dependencies
+
+10.Thunderclient/Postmam : to interact with backend without frontend
+11. use try/catch block to find errors
+12. search for http status code on google
+13. Medium,w3 school
+14. Winston logger

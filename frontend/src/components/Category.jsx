@@ -1,0 +1,90 @@
+/* eslint-disable jsx-a11y/alt-text */
+import React, { useEffect, useState } from "react";
+import Button from "react-bootstrap/Button";
+import Card from "react-bootstrap/Card";
+import NavBar from "./NavBar";
+import "../styles/AllProducts.css";
+import "../styles/Cards.css";
+import axios from "axios";
+
+import { useCart } from "../contexts/CartContext";
+import { useNavigate } from "react-router-dom";
+import Form from 'react-bootstrap/Form';
+
+const Category = ({ category }) => {
+  const navigate = useNavigate();
+  const { addToCart } = useCart();
+  const [products, setProducts] = useState([]);
+  const [searchTerm, setSearchTerm] = useState("");
+
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const { data } = await axios.get(
+          `http://localhost:5000/api/products/get/${category}`
+        );
+        setProducts(data);
+      } catch (error) {
+        console.error("Error fetching products:", error);
+      }
+    };
+    fetchData();
+  }, [category]);
+
+  const handleSearch = (event) => {
+    setSearchTerm(event.target.value);
+  };
+
+  const filteredProducts = products.filter(
+    (product) =>
+      product.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      product.details.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      product.category.toLowerCase().includes(searchTerm.toLowerCase())
+  );
+
+  return (
+    <>
+      <NavBar />
+      <div className="search-bar-container">
+          <Form.Control
+            type="text"
+            placeholder="Search products..."
+            value={searchTerm}
+            onChange={handleSearch}
+            className="search-bar"
+          />
+        </div>
+      <div className="allp-container">
+        
+        {filteredProducts.map((product) => (
+          <Card
+            className="card"
+            style={{ margin: 14, width: "30rem" }}
+            key={product._id}
+          >
+            <img
+              className="card-img"
+              style={{ height: "500px" }}
+              src={product.imageURL}
+              onClick={() => navigate(`/single/${product._id}`)}
+              alt={product.title}
+            />
+            <Card.Body>
+              <Card.Title>{product.title}</Card.Title>
+              <Card.Text>{product.details}</Card.Text>
+              <Card.Text>{product.category}</Card.Text>
+              <Button
+                variant="primary"
+                onClick={() => addToCart(product)}
+              >
+                Rs.{product.price}
+              </Button>
+            </Card.Body>
+          </Card>
+        ))}
+      </div>
+    </>
+  );
+};
+
+export default Category;

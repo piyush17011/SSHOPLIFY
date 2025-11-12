@@ -1,0 +1,45 @@
+/* Styles for the Cards component */
+
+.cards-container {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 20px;
+  padding: 20px;
+}
+
+.card {
+  width: 100%;
+  max-width: 400px;
+}
+
+.card-img {
+  width: 100%;
+  height: auto;
+  object-fit: cover;
+}
+
+.card-title {
+  font-size: 1.5rem;
+  font-weight: bold;
+  margin-bottom: 10px;
+}
+
+.card-text {
+  font-size: 1rem;
+  line-height: 1.5;
+  margin-bottom: 15px;
+}
+
+.card-body {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+@media (max-width: 768px) {
+  .card {
+    width: 100%;
+    max-width: none;
+  }
+}

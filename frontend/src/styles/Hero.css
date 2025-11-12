@@ -1,0 +1,31 @@
+.hero-text{
+    color : black;
+    font-weight :800;
+}
+
+.carousel-img{
+    height:70vh;
+    width:100%;
+}
+.carousel-text{
+    color : rgb(255, 255, 255);
+    font-weight:650;
+}
+
+.shop-button{
+    margin-top: 15px;
+}
+/* Responsive design */
+@media (max-width: 768px) {
+    .carousel-img {
+      height: 50vh; /* Adjust height for smaller screens */
+    }
+  
+    .carousel-text {
+      font-size: 0.8rem; /* Adjust text size for smaller screens */
+    }
+  
+    .shop-button {
+      margin-top: 10px;
+    }
+  }
