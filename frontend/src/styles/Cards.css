@@ -1,45 +1,69 @@
-/* Styles for the Cards component */
+/* Unique namespace for homepage category cards */
 
-.cards-container {
+.home-cards-container {
   display: flex;
   flex-wrap: wrap;
   justify-content: center;
-  gap: 20px;
+  gap: 25px;
   padding: 20px;
 }
 
-.card {
+/* Card Wrapper */
+.home-card {
   width: 100%;
   max-width: 400px;
+  border-radius: 16px;
+  overflow: hidden;
+  background: #ffffff;
+  box-shadow: 0 4px 10px rgba(0,0,0,0.12);
+  transition: transform 0.25s ease, box-shadow 0.25s ease;
 }
 
-.card-img {
+.home-card:hover {
+  transform: translateY(-8px);
+  box-shadow: 0 12px 20px rgba(0,0,0,0.18);
+}
+
+/* Image */
+.home-card-img {
   width: 100%;
-  height: auto;
+  height: 300px;
   object-fit: cover;
 }
 
-.card-title {
-  font-size: 1.5rem;
-  font-weight: bold;
+/* Body */
+.home-card-body {
+  padding: 18px;
+  text-align: center;
+}
+
+/* Title */
+.home-card-title {
+  font-size: 1.6rem;
+  font-weight: 700;
   margin-bottom: 10px;
+  color: #222;
 }
 
-.card-text {
+/* Description */
+.home-card-text {
   font-size: 1rem;
-  line-height: 1.5;
+  color: #555;
   margin-bottom: 15px;
+  line-height: 1.5;
 }
 
-.card-body {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-}
-
+/* Mobile Responsive */
 @media (max-width: 768px) {
-  .card {
-    width: 100%;
-    max-width: none;
+  .home-card-img {
+    height: 240px;
+  }
+
+  .home-card-title {
+    font-size: 1.4rem;
+  }
+
+  .home-card-text {
+    font-size: 0.95rem;
   }
 }
