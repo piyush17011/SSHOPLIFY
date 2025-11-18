@@ -3,34 +3,43 @@ const connect = require('./dbConnection');
 const userRoutes = require('./routes/userRoutes');
 const productRoutes = require('./routes/productRoutes');
 const orderRoutes = require('./routes/orderRoutes');
-const cors = require('cors')
+const cartRoutes = require('./routes/cartRoutes');
+const cors = require('cors');
 
+const app = express();
 
-const app = express();  //creates a server
+// Connect DB
 connect();
 
+// Allow Netlify + Localhost
+const allowedOrigins = [
+  'http://localhost:3000',
+  'https://your-netlify-site.netlify.app',   // <--- CHANGE THIS AFTER DEPLOY
+];
 
-const corsOptions = {
-  origin: true,
+app.use(cors({
+  origin: (origin, callback) => {
+    if (!origin || allowedOrigins.includes(origin)) {
+      callback(null, true);
+    } else {
+      console.log("Blocked by CORS:", origin);
+      callback(new Error("Not allowed by CORS"));
+    }
+  },
   credentials: true,
-};
+}));
 
-//APIs : middleware(use)
-const allowedOrigins = ['http://localhost:3000'];
-
-app.use(cors(corsOptions));
 app.use(express.json());
-// app.use(cookieParser());
-app.use("/api/users",userRoutes);
-app.use("/api/products",productRoutes);
-app.use("/api/orders",orderRoutes);
-// app.get("/new",(req,res)=>{
-//     res.send("New- GET");  
-//         //display hi on port 5000
-//     // res.sendFile(index.html);
-// })
 
-app.listen(5000,()=>{
-    console.log("Server is running...")
+// Routes
+app.use("/api/users", userRoutes);
+app.use("/api/products", productRoutes);
+app.use("/api/orders", orderRoutes);
+app.use("/api/cart", cartRoutes);
+
+// Port for Render + Local
+const port = process.env.PORT || 5000;
+
+app.listen(port, () => {
+  console.log("Server is running on port " + port);
 });
-
