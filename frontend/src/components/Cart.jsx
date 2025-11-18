@@ -14,7 +14,6 @@ export default function Cart() {
 
   const userId = user?._doc?._id;
 
-  // ✅ WRAP FETCH IN useCallback TO FIX ESLINT
   const fetchCart = useCallback(async () => {
     try {
       const res = await axios.get(
@@ -26,13 +25,12 @@ export default function Cart() {
     } finally {
       setLoading(false);
     }
-  }, [userId]);  // dependency OK
+  }, [userId]);
 
   useEffect(() => {
     if (userId) fetchCart();
-  }, [userId, fetchCart]);  // ESLint satisfied
+  }, [userId, fetchCart]);
 
-  // Update quantity
   const handleQuantityChange = async (productId, quantity) => {
     if (quantity < 1) return;
 
@@ -49,7 +47,6 @@ export default function Cart() {
     }
   };
 
-  // Remove Item
   const handleRemove = async (productId) => {
     try {
       await axios.delete(`https://sshoplify.onrender.com/api/cart/remove`, {
@@ -61,6 +58,46 @@ export default function Cart() {
       console.error("Error removing item:", err);
     }
   };
+const handleBuyNow = async () => {
+  if (!cart || !cart.items.length) return;
+
+  try {
+    // Map cart items correctly
+    const orderItems = cart.items.map(item => ({
+      product: item.productId._id, // <--- MUST be "product", not productId
+      quantity: Number(item.quantity),
+    }));
+
+    // Calculate total amount
+    const amount = orderItems.reduce((sum, item) => {
+      const product = cart.items.find(p => p.productId._id === item.product);
+      return sum + product.productId.price * item.quantity;
+    }, 0);
+
+    if (!userId) {
+      alert("User not logged in");
+      return;
+    }
+
+    const res = await axios.post(
+      "https://sshoplify.onrender.com/api/orders/addorder",
+      {
+        userId,
+        orderItems,
+        amount,
+      }
+    );
+
+    console.log("Order created:", res.data);
+    alert("Order placed successfully!");
+    fetchCart(); // optional: clear cart after order
+  } catch (err) {
+    console.error("Error placing order:", err.response?.data || err.message);
+    alert("Failed to place order. Check console for details.");
+  }
+};
+
+
 
   if (loading) return <div className="text-center p-4 fs-4">Loading...</div>;
 
@@ -136,8 +173,12 @@ export default function Cart() {
           </Card>
         ))}
 
-        <Card className="total-card p-3 mt-4">
-          <h4 className="text-end">Total: ₹{totalPrice}</h4>
+        {/* Total + Buy Now */}
+        <Card className="total-card p-3 mt-4 d-flex justify-content-between align-items-center">
+          <h4>Total: ₹{totalPrice}</h4>
+          <Button variant="success" onClick={handleBuyNow}>
+            Buy Now
+          </Button>
         </Card>
 
       </div>

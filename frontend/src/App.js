@@ -39,8 +39,7 @@ const ValidateRoute = ({ children }) => {
         <Route path="/about" element={<About />} />
         <Route path="/single/:id" element={<SingleProductPage />}></Route>
         <Route path="/allproducts" element={<AllProducts/>}></Route>
-        <Route path="/orders" element={<Orders/>}></Route>
-        
+        <Route path="/orders" element={<Orders/>}></Route>   
       </Routes>
     </Router>
  
