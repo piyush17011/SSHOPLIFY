@@ -1,40 +1,43 @@
 /* eslint-disable jsx-a11y/alt-text */
-import React, { useEffect, useState, useContext } from "react";
+import React, { useEffect, useState, useContext, useCallback } from "react";
 import axios from "axios";
 import NavBar from "./NavBar";
 import Card from "react-bootstrap/Card";
 import Button from "react-bootstrap/Button";
 import { AuthContext } from "../auth/AuthContext";
-import "../styles/Cart.css";
-import { useNavigate } from 'react-router-dom';
+import '../styles/Cart.css';
 
 export default function Cart() {
   const { user } = useContext(AuthContext);
   const [cart, setCart] = useState(null);
   const [loading, setLoading] = useState(true);
-  const navigate = useNavigate(); 
+
   const userId = user?._doc?._id;
 
-  const fetchCart = async () => {
+  // ✅ WRAP FETCH IN useCallback TO FIX ESLINT
+  const fetchCart = useCallback(async () => {
     try {
-      const res = await axios.get(`https://sshoplify.onrender.com/api/cart/${userId}`);
+      const res = await axios.get(
+        `https://sshoplify.onrender.com/api/cart/${userId}`
+      );
       setCart(res.data);
     } catch (err) {
       console.error("Error fetching cart:", err);
     } finally {
       setLoading(false);
     }
-  };
+  }, [userId]);  // dependency OK
 
   useEffect(() => {
     if (userId) fetchCart();
-  }, [userId]);
+  }, [userId, fetchCart]);  // ESLint satisfied
 
+  // Update quantity
   const handleQuantityChange = async (productId, quantity) => {
     if (quantity < 1) return;
 
     try {
-      await axios.put("https://sshoplify.onrender.com/api/cart/update", {
+      await axios.put(`https://sshoplify.onrender.com/api/cart/update`, {
         userId,
         productId,
         quantity,
@@ -46,9 +49,10 @@ export default function Cart() {
     }
   };
 
+  // Remove Item
   const handleRemove = async (productId) => {
     try {
-      await axios.delete("https://sshoplify.onrender.com/api/cart/remove", {
+      await axios.delete(`https://sshoplify.onrender.com/api/cart/remove`, {
         data: { userId, productId },
       });
 
@@ -57,40 +61,6 @@ export default function Cart() {
       console.error("Error removing item:", err);
     }
   };
-
-  const handlePlaceOrder = async () => {
-  const orderItems = cart.items.map(item => ({
-    product: item.productId._id,   // correct product id
-    quantity: item.quantity,       // correct quantity
-  }));
-
-  const amount = cart.items.reduce(
-    (sum, item) => sum + item.productId.price * item.quantity,
-    0
-  );
-
-  const orderData = {
-    userId,
-    orderItems,
-    amount,
-  };
-  
-  try {
-    console.log(orderData);
-
-    const response = await axios.post(
-      "https://sshoplify.onrender.com/api/orders/addorder",
-      orderData
-    );
-
-    alert(`Order placed successfully! Total Price: Rs.${amount}`);
-    navigate("/orders");
-
-  } catch (err) {
-    console.error("Order error:", err);
-    alert("Error placing order");
-  }
-};
 
   if (loading) return <div className="text-center p-4 fs-4">Loading...</div>;
 
@@ -111,29 +81,27 @@ export default function Cart() {
     <>
       <NavBar />
 
-      <div className="container mt-4 cart-container">
+      <div className="container mt-4">
         <h2 className="text-center mb-4">Your Cart</h2>
 
         {cart.items.map((item) => (
-          <Card className="cart-card" key={item._id}>
-            <div className="cart-row">
+          <Card className="cart-card mb-3" key={item._id}>
+            <div className="d-flex p-3 justify-content-between align-items-center">
 
-              {/* Left */}
-              <div className="cart-left">
+              <div className="d-flex align-items-center">
                 <img
-                  src={item.productId.imageURL || "/placeholder.png"}
-                  alt="Product"
+                  src={item.productId.imageURL}
                   className="cart-img"
+                  alt=""
                 />
 
-                <div>
+                <div className="ms-3">
                   <h5 className="cart-title">{item.productId.title}</h5>
-                  <p className="cart-price">₹{item.productId.price}</p>
+                  <p className="text-muted mb-0">₹{item.productId.price}</p>
                 </div>
               </div>
 
-              {/* Right */}
-              <div className="cart-right">
+              <div className="d-flex align-items-center">
                 <Button
                   variant="secondary"
                   className="quantity-btn"
@@ -144,7 +112,7 @@ export default function Cart() {
                   -
                 </Button>
 
-                <span>{item.quantity}</span>
+                <span className="mx-3">{item.quantity}</span>
 
                 <Button
                   variant="secondary"
@@ -158,24 +126,20 @@ export default function Cart() {
 
                 <Button
                   variant="danger"
-                  className="remove-btn"
+                  className="ms-4 remove-btn"
                   onClick={() => handleRemove(item.productId._id)}
                 >
                   Remove
                 </Button>
               </div>
-
             </div>
           </Card>
         ))}
 
-        <Card className="total-card">
+        <Card className="total-card p-3 mt-4">
           <h4 className="text-end">Total: ₹{totalPrice}</h4>
         </Card>
 
-        <Button className="placeorder-button" onClick={handlePlaceOrder}>
-          Place Order
-        </Button>
       </div>
     </>
   );
