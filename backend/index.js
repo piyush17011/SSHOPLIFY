@@ -14,7 +14,7 @@ connect();
 // Allow Netlify + Localhost
 const allowedOrigins = [
   'http://localhost:3000',
-  'https://your-netlify-site.netlify.app',   // <--- CHANGE THIS AFTER DEPLOY
+  'https://sshoplify-frontend.onrender.com',   // <--- CHANGE THIS AFTER DEPLOY
 ];
 
 app.use(cors({
