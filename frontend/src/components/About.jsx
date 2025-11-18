@@ -11,9 +11,9 @@ const About = () => {
       <p className="about-content">
         SHOPLIFY is your go-to online store for the latest trends in shoes for men, women, and kids. We offer a wide range of shoes to suit all styles and preferences.
       </p>
-      <h2 className="about-heading">OUR TEAM</h2>
+      <h2 className="about-heading"> About me :</h2>
       <p className="about-content">
-        PIYUSH, SOHAM, SMEET, EKANSH
+        Github : https://github/piyush17011
       </p>
     </div>
     </>

@@ -3,17 +3,14 @@ import React, { useEffect, useState } from "react";
 import Button from "react-bootstrap/Button";
 import Card from "react-bootstrap/Card";
 import NavBar from "./NavBar";
-import "../styles/AllProducts.css";
-import "../styles/Cards.css";
+import "../styles/Category.css";  // <- NEW FILE
 import axios from "axios";
-
-import { useCart } from "../contexts/CartContext";
 import { useNavigate } from "react-router-dom";
 import Form from 'react-bootstrap/Form';
 
 const Category = ({ category }) => {
   const navigate = useNavigate();
-  const { addToCart } = useCart();
+
   const [products, setProducts] = useState([]);
   const [searchTerm, setSearchTerm] = useState("");
 
@@ -21,7 +18,7 @@ const Category = ({ category }) => {
     const fetchData = async () => {
       try {
         const { data } = await axios.get(
-          `http://localhost:5000/api/products/get/${category}`
+          `https://sshoplify.onrender.com/api/products/get/${category}`
         );
         setProducts(data);
       } catch (error) {
@@ -30,10 +27,6 @@ const Category = ({ category }) => {
     };
     fetchData();
   }, [category]);
-
-  const handleSearch = (event) => {
-    setSearchTerm(event.target.value);
-  };
 
   const filteredProducts = products.filter(
     (product) =>
@@ -45,41 +38,44 @@ const Category = ({ category }) => {
   return (
     <>
       <NavBar />
+
       <div className="search-bar-container">
-          <Form.Control
-            type="text"
-            placeholder="Search products..."
-            value={searchTerm}
-            onChange={handleSearch}
-            className="search-bar"
-          />
-        </div>
-      <div className="allp-container">
-        
+        <Form.Control
+          type="text"
+          placeholder="Search products..."
+          value={searchTerm}
+          onChange={(e) => setSearchTerm(e.target.value)}
+          className="search-bar"
+        />
+      </div>
+
+      <div className="cat-container">
         {filteredProducts.map((product) => (
-          <Card
-            className="card"
-            style={{ margin: 14, width: "30rem" }}
-            key={product._id}
-          >
+          <Card className="cat-card" key={product._id}>
+            
+            {/* Product Image */}
             <img
-              className="card-img"
-              style={{ height: "500px" }}
+              className="cat-img"
               src={product.imageURL}
-              onClick={() => navigate(`/single/${product._id}`)}
               alt={product.title}
+              onClick={() => navigate(`/single/${product._id}`)}
             />
-            <Card.Body>
-              <Card.Title>{product.title}</Card.Title>
-              <Card.Text>{product.details}</Card.Text>
-              <Card.Text>{product.category}</Card.Text>
+
+            {/* Card Body */}
+            <Card.Body className="cat-body">
+              <h3 className="cat-title">{product.title}</h3>
+              <p className="cat-details">{product.details}</p>
+              <p className="cat-category">{product.category}</p>
+
               <Button
                 variant="primary"
-                onClick={() => addToCart(product)}
+                className="cat-price-btn"
+                onClick={() => navigate(`/single/${product._id}`)}
               >
-                Rs.{product.price}
+                ₹{product.price}
               </Button>
             </Card.Body>
+
           </Card>
         ))}
       </div>

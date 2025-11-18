@@ -30,7 +30,7 @@ function LogIn(){
     dispatch({ type: "LOGIN_START" });
 
     try {
-      const res = await axios.post(`http://localhost:5000/api/users/login`,(user));
+      const res = await axios.post(`https://sshoplify.onrender.com/api/users/login`,(user));
       
       const result = await res.data;
       console.log(result);
@@ -58,10 +58,9 @@ function LogIn(){
     //to update user details state on every change
     
    
-    // axios.defaults.withCredentials = true;
+
     function handleInput(e){
-      // console.log(e);
-      // console.log(e.target.value);
+
       let name = e.target.name;
       let value = e.target.value;
       setUser({

@@ -7,18 +7,20 @@ import { useNavigate } from 'react-router-dom';
 import '../styles/AllProducts.css';
 import axios from 'axios';
 import Form from 'react-bootstrap/Form';
-import { useCart } from '../contexts/CartContext';
+
+
 
 const AllProducts = () => {
   const navigate = useNavigate(); 
-  const { addToCart } = useCart();
+
   const [products, setProducts] = useState([]);
   const [searchTerm, setSearchTerm] = useState("");
+
 
   useEffect(() => {
     const fetchdata = async () => {
       try {
-        const { data } = await axios.get("http://localhost:5000/api/products/get");
+        const { data } = await axios.get("https://sshoplify.onrender.com/api/products/get");
         setProducts(data);
       } catch (error) {
         console.error("Error fetching products:", error);
@@ -63,7 +65,7 @@ const AllProducts = () => {
               <Card.Text>
                 {product.category}
               </Card.Text>
-              <Button variant="primary" onClick={() => addToCart(product)}>Rs.{product.price}</Button>
+              <Button variant="primary" onClick={() =>navigate(`/single/${product._id}`)}>Rs.{product.price}</Button>
             </Card.Body>
           </Card>
         ))}

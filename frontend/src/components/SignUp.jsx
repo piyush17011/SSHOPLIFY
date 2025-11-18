@@ -41,9 +41,9 @@ function SignUp(){
     e.stopPropagation();
     console.log(user);
   try{
-    // http://localhost:5000/api/users/register
+    // https://sshoplify.onrender.com/api/users/register
 
-    // const response = await fetch(`http://localhost:5000/api/users/register`,{
+    // const response = await fetch(`https://sshoplify.onrender.com/api/users/register`,{
     //   method :"POST",
     //   headers :  {
     //     "Content-Type" : "application/json",
@@ -63,7 +63,7 @@ function SignUp(){
     //   // navigate("/login")
     // }
     const response = await  axios.post(
-      'http://localhost:5000/api/users/register',user );
+      'https://sshoplify.onrender.com/api/users/register',user );
     console.log(response);
      if(response.data.message === "Exists"){
       alert("Already Exists")

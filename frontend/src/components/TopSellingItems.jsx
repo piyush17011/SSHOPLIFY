@@ -1,69 +1,65 @@
 /* eslint-disable jsx-a11y/alt-text */
-import React from 'react'
-import { useCart } from '../contexts/CartContext';
-import { useNavigate } from 'react-router-dom';
-import { useEffect, useState } from "react";
-import Button from 'react-bootstrap/Button';
-import Card from 'react-bootstrap/Card';
-import '../styles/FetchedCards.css'
-import axios from 'axios';
+import React, { useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
+import Button from "react-bootstrap/Button";
+import Card from "react-bootstrap/Card";
+import axios from "axios";
 
+import "../styles/FetchedCards.css"; // Updated CSS
 
-
-const FetchedTSCards = ({category}) => {
-
+const FetchedTSCards = ({ category }) => {
   const navigate = useNavigate();
+  const [products, setProducts] = useState([]);
 
-  const handleCardClick = (product_id) => {
-    navigate(`/single/${product_id}`);
-  };
-  const { addToCart } = useCart();
-
-  const [products, setProducts] = useState("");
+  // Fetch products
   useEffect(() => {
     const fetchdata = async () => {
-      const data = await axios.get(`http://localhost:5000/api/products/get/${category}`);
-      console.log("Product --->",data)
-      setProducts(data);
+      try {
+        const response = await axios.get(
+          `https://sshoplify.onrender.com/api/products/get/${category}`
+        );
+        setProducts(response.data);
+      } catch (error) {
+        console.log("Error fetching products:", error);
+      }
     };
     fetchdata();
   }, [category]);
 
+  const handleCardClick = (id) => {
+    navigate(`/single/${id}`);
+  };
+
   return (
-    <>
-    <div className='fetched-cards-container' >
-        {products &&
-          products?.data.map((product) => (
-      <Card className='card' style={{ margin:14,width: '30rem' }}  key={product._id}
-      onClick={() => handleCardClick(product._id)} >
-        
-           <img className='card-img' style={{height:"500px"}} src={product.imageURL}></img>
-     
-      <Card.Body>
-        <Card.Title>{product.title}</Card.Title>
-        <Card.Text>
-          {product.details}
-        </Card.Text>
-        <Button variant="primary" onClick={() => addToCart(product)}>Rs.{product.price}</Button>
-      </Card.Body>
-    </Card>
-    ))}
-    
+    <div className="ts-cards-container">
+      {products.map((product) => (
+        <Card
+          className="ts-card"
+          key={product._id}
+          onClick={() => handleCardClick(product._id)}
+        >
+          {/* Image */}
+          <img className="ts-card-img" src={product.imageURL} alt={product.title} />
+
+          {/* Body */}
+          <Card.Body>
+            <h5 className="ts-card-title">{product.title}</h5>
+            <p className="ts-card-price">₹{product.price}</p>
+
+            <Button
+              variant="primary"
+              onClick={(e) => {
+                e.stopPropagation(); // prevents card click
+                navigate(`/single/${product._id}`);
+              }}
+            >
+              View Product
+            </Button>
+          </Card.Body>
+        </Card>
+      ))}
     </div>
-    </>
-          
-         
-          
-    
   );
-}
+};
 
-
-  
-
-
-
-
-
-
-export default FetchedTSCards
+export default FetchedTSCards;

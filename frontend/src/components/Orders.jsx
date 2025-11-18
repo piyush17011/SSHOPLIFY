@@ -14,14 +14,19 @@ const Orders = () => {
     const handleHomeClick = () => {
       navigate('/'); 
     };
-
-  const { user } = useContext(AuthContext);   
+    const { user } = useContext(AuthContext);  
+    useEffect(() => {
+    if (!user) {
+      navigate('/login');
+    }
+  }, [user, navigate]);
+   
   const [orders, setOrders] = useState([]);
   
   useEffect(() => {
     const fetchOrders = async () => {
       try {
-        const response = await axios.get(`http://localhost:5000/api/orders/userorder/${user._doc._id}`); // Adjust URL as per your backend endpoint
+        const response = await axios.get(`https://sshoplify.onrender.com/api/orders/userorder/${user._doc._id}`); // Adjust URL as per your backend endpoint
         console.log(response.data);
         setOrders(response.data);
       } catch (error) {
