@@ -110,6 +110,10 @@ function LogIn(){
         Dont Have an Account?
         <a onClick={handleRegisterClick} className=''> Register Here!</a>
         </center>
+        <center className='bottom-login-text'>
+        
+        <a onClick={()=>navigate('/')} className=''>Go to Home Page</a>
+        </center>
         </div>
     );
 }
