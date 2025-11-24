@@ -8,14 +8,11 @@ import '../styles/AllProducts.css';
 import axios from 'axios';
 import Form from 'react-bootstrap/Form';
 
-
-
 const AllProducts = () => {
   const navigate = useNavigate(); 
 
   const [products, setProducts] = useState([]);
   const [searchTerm, setSearchTerm] = useState("");
-
 
   useEffect(() => {
     const fetchdata = async () => {
@@ -33,19 +30,20 @@ const AllProducts = () => {
     setSearchTerm(event.target.value);
   };
 
-  const filteredProducts = products.filter(product =>
-    product.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
-    product.details.toLowerCase().includes(searchTerm.toLowerCase()) ||
-    product.category.toLowerCase().includes(searchTerm.toLowerCase())
-  );
+const filteredProducts = products.filter(product =>
+  (product.title?.toLowerCase() || "").includes(searchTerm.toLowerCase()) ||
+  (product.details?.toLowerCase() || "").includes(searchTerm.toLowerCase()) ||
+  (product.description?.toLowerCase() || "").includes(searchTerm.toLowerCase()) ||
+  (product.category?.toLowerCase() || "").includes(searchTerm.toLowerCase()) ||
+  (product.price?.toString() || "").includes(searchTerm)
+);
 
   return (
     <>
       <NavBar/>
+
       <div className="search-bar-container">
-        
         <Form.Control
-        
           type="text"
           placeholder="Search products..."
           value={searchTerm}
@@ -53,19 +51,32 @@ const AllProducts = () => {
           className="search-bar"
         />
       </div>
+
       <div className="allp-container">
         {filteredProducts.map((product) => (
-          <Card className='card' style={{ margin:14, width: '30rem' }} key={product._id}>
-            <img className='card-img' src={product.imageURL} onClick={() => navigate(`/single/${product._id}`)} />
-            <Card.Body>
-              <Card.Title>{product.title}</Card.Title>
-              <Card.Text>
+          <Card 
+            className='card'
+            key={product._id}
+          >
+            <img 
+              className='card-img'
+              src={product.imageURL}
+              onClick={() => navigate(`/single/${product._id}`)} 
+            />
+
+            <Card.Body className='card-body'>
+              <p className="category">{product.category}</p>
+              <Card.Title className='card-title'>{product.title}</Card.Title>
+              <Card.Text className='card-text'>
                 {product.details}
               </Card.Text>
-              <Card.Text>
-                {product.category}
-              </Card.Text>
-              <Button variant="primary" onClick={() =>navigate(`/single/${product._id}`)}>Rs.{product.price}</Button>
+
+              <Button 
+                className="btn-primary-custom"
+                onClick={() => navigate(`/single/${product._id}`)}
+              >
+                Rs.{product.price}
+              </Button>
             </Card.Body>
           </Card>
         ))}

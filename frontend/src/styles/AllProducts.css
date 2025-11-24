@@ -161,8 +161,12 @@
 /* ================================
    RESPONSIVENESS
 ================================= */
-
 @media (max-width: 768px) {
+  .allp-container {
+    gap: 15px;
+    padding: 15px;
+  }
+
   .card-img {
     height: 200px;
   }
@@ -171,12 +175,12 @@
     height: 300px;
   }
 
-  .single-card-title {
-    font-size: 22px;
+  .single-card-body {
+    padding: 20px;
   }
 
-  .single-card-text {
-    font-size: 15px;
+  .single-card-title {
+    font-size: 22px;
   }
 
   .single-price {
@@ -185,12 +189,39 @@
 }
 
 @media (max-width: 480px) {
+
+  .allp-container {
+    gap: 10px;
+    padding: 10px;
+    grid-template-columns: 1fr;
+  }
+
   .card-img {
     height: 180px;
   }
 
+  .card-title {
+    font-size: 16px;
+  }
+
+  .category {
+    font-size: 12px;
+  }
+
+  .singleCard {
+    padding: 20px 10px;
+  }
+
   .single-card-img {
     height: 260px;
+  }
+
+  .single-card-body {
+    padding: 15px;
+  }
+
+  .single-category {
+    font-size: 14px;
   }
 
   .single-card-title {
@@ -200,4 +231,26 @@
   .single-card-text {
     font-size: 14px;
   }
+
+  .single-price {
+    font-size: 18px;
+  }
+
+  /* Make buy button full width in mobile */
+  .btn-primary-custom {
+    width: 100%;
+    font-size: 15px;
+    padding: 14px;
+  }
+}
+/* Prevent horizontal overflow on small screens */
+html, body {
+  overflow-x: hidden;
+}
+
+/* Responsive card width */
+.card {
+  width: 100%;
+  max-width: 350px;
+  margin: auto;
 }
