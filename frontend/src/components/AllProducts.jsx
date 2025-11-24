@@ -35,7 +35,7 @@ const filteredProducts = products.filter(product =>
   (product.details?.toLowerCase() || "").includes(searchTerm.toLowerCase()) ||
   (product.description?.toLowerCase() || "").includes(searchTerm.toLowerCase()) ||
   (product.category?.toLowerCase() || "").includes(searchTerm.toLowerCase()) ||
-  (product.price?.toString() || "").includes(searchTerm)
+  (product.price?.toString() || "").includes(searchTerm) //no need
 );
 
   return (
