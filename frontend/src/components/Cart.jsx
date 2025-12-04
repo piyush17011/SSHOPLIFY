@@ -62,15 +62,15 @@ const handleBuyNow = async () => {
   if (!cart || !cart.items.length) return;
 
   try {
-    // Map cart items correctly
-    const orderItems = cart.items.map(item => ({
-      product: item.productId._id, // <--- MUST be "product", not productId
+    // 1) Prepare order items for our DB
+    const orderItems = cart.items.map((item) => ({
+      product: item.productId._id,
       quantity: Number(item.quantity),
     }));
 
-    // Calculate total amount
+    // 2) Calculate total amount in INR
     const amount = orderItems.reduce((sum, item) => {
-      const product = cart.items.find(p => p.productId._id === item.product);
+      const product = cart.items.find((p) => p.productId._id === item.product);
       return sum + product.productId.price * item.quantity;
     }, 0);
 
@@ -79,21 +79,59 @@ const handleBuyNow = async () => {
       return;
     }
 
-    const res = await axios.post(
-      "https://sshoplify.onrender.com/api/orders/addorder",
-      {
-        userId,
-        orderItems,
-        amount,
-      }
+    // 3) Ask backend to create Razorpay order
+    const { data } = await axios.post(
+      "https://sshoplify.onrender.com/api/payment/create-order",
+      { amount }
     );
 
-    console.log("Order created:", res.data);
-    alert("Order placed successfully!");
-    fetchCart(); // optional: clear cart after order
+    // 4) Open Razorpay Checkout
+    const options = {
+      key: data.key,
+      amount: data.amount,
+      currency: data.currency,
+      name: "SHOPLIFY",
+      description: "Sneaker purchase",
+      order_id: data.orderId,
+      handler: async function () {
+        // Simplest: if payment succeeds, create order in our DB
+        try {
+          const res = await axios.post(
+            "https://sshoplify.onrender.com/api/orders/addorder",
+            {
+              userId,
+              orderItems,
+              amount,
+            }
+          );
+          console.log("Order created:", res.data);
+          alert("Payment successful! Order placed.");
+          fetchCart();
+        } catch (err) {
+          console.error(
+            "Error creating order after payment:",
+            err.response?.data || err.message
+          );
+          alert("Payment ok but order failed. Contact support.");
+        }
+      },
+      prefill: {
+        name: user?._doc?.username || "",
+        email: user?._doc?.email || "",
+      },
+      theme: {
+        color: "#121212",
+      },
+    };
+
+    const rzp = new window.Razorpay(options);
+    rzp.open();
   } catch (err) {
-    console.error("Error placing order:", err.response?.data || err.message);
-    alert("Failed to place order. Check console for details.");
+    console.error(
+      "Error starting payment:",
+      err.response?.data || err.message
+    );
+    alert("Failed to start payment. Check console for details.");
   }
 };
 
