@@ -46,15 +46,21 @@ export const AuthContextProvider = ({ children }) => {
   const [state, dispatch] = useReducer(AuthReducer, initial_state);
 
   useEffect(() => {
-    const savedUser = (localStorage.getItem("user"));
-    if (savedUser) {
-      dispatch({ type: "LOGIN_SUCCESS", payload: savedUser });
+    const savedUser = localStorage.getItem("user");
+    if (!savedUser) return;
+
+    try {
+      const parsedUser = JSON.parse(savedUser);
+      dispatch({ type: "LOGIN_SUCCESS", payload: parsedUser });
+    } catch (err) {
+      console.error("Failed to parse saved user", err);
+      localStorage.removeItem("user");
     }
   }, []);
 
   useEffect(() => {
     if (state.user) {
-      localStorage.setItem("user", (state.user));
+      localStorage.setItem("user", JSON.stringify(state.user));
     } else {
       localStorage.removeItem("user");
     }

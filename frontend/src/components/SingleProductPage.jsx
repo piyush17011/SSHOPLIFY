@@ -1,5 +1,5 @@
 import React from 'react';
-import { useParams } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 import axios from 'axios';
 import { useEffect, useState } from "react";
 import Button from 'react-bootstrap/Button';
@@ -10,27 +10,33 @@ import '../styles/SingleProductPage.css'; // Import the new CSS file
 
 const SingleProductPage = () => {
   const { id } = useParams(); // Get product id from URL
+  const navigate = useNavigate();
   const [product, setProduct] = useState("");
-    const { user } = useContext(AuthContext);
-const handleAddToCart = async (product) => {
-  console.log("User ID:", user?._doc?._id);
-  console.log("Product ID:", product?._id);
+  const { user } = useContext(AuthContext);
+  const hydratedUser = user?._doc ?? user;
 
-  try {
-    const res = await axios.post("https://sshoplify.onrender.com/api/cart/add", {
-      userId: user._doc._id,
-      productId: product._id,
-      quantity: 1
-    });
+  const handleAddToCart = async (productToAdd) => {
+    if (!hydratedUser?._id) {
+      alert("Please log in to add items to your cart.");
+      navigate("/login");
+      return;
+    }
 
-    console.log("Added to cart:", res.data);
-    alert("Added to cart!");
+    try {
+      const res = await axios.post("https://sshoplify.onrender.com/api/cart/add", {
+        userId: hydratedUser._id,
+        productId: productToAdd._id,
+        quantity: 1
+      });
 
-  } catch (error) {
-    console.error("Add to cart error:", error.response?.data || error.message);
-    alert("Failed to add to cart.");
-  }
-};
+      console.log("Added to cart:", res.data);
+      alert("Added to cart!");
+
+    } catch (error) {
+      console.error("Add to cart error:", error.response?.data || error.message);
+      alert("Failed to add to cart.");
+    }
+  };
 
 
 

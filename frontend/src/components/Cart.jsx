@@ -5,14 +5,16 @@ import NavBar from "./NavBar";
 import Card from "react-bootstrap/Card";
 import Button from "react-bootstrap/Button";
 import { AuthContext } from "../auth/AuthContext";
+import { useNavigate } from "react-router-dom";
 import '../styles/Cart.css';
 
 export default function Cart() {
   const { user } = useContext(AuthContext);
+  const hydratedUser = user?._doc ?? user;
   const [cart, setCart] = useState(null);
   const [loading, setLoading] = useState(true);
 
-  const userId = user?._doc?._id;
+  const userId = hydratedUser?._id;
 
   const fetchCart = useCallback(async () => {
     try {
@@ -58,6 +60,8 @@ export default function Cart() {
       console.error("Error removing item:", err);
     }
   };
+const navigate = useNavigate();
+
 const handleBuyNow = async () => {
   if (!cart || !cart.items.length) return;
 
@@ -105,8 +109,36 @@ const handleBuyNow = async () => {
             }
           );
           console.log("Order created:", res.data);
+
+          try {
+            await axios.delete("https://sshoplify.onrender.com/api/cart/clear", {
+              data: { userId },
+            });
+          } catch (clearErr) {
+            console.error("Cart clear failed:", clearErr.response?.data || clearErr.message);
+            if (cart?.items?.length) {
+              try {
+                await Promise.all(
+                  cart.items.map((item) =>
+                    axios.delete("https://sshoplify.onrender.com/api/cart/remove", {
+                      data: { userId, productId: item.productId._id },
+                    })
+                  )
+                );
+              } catch (fallbackErr) {
+                console.error("Fallback cart cleanup failed:", fallbackErr.response?.data || fallbackErr.message);
+              }
+            }
+          }
+
+          await fetchCart();
           alert("Payment successful! Order placed.");
-          fetchCart();
+          navigate("/order-success", {
+            state: {
+              orderId: res.data._id,
+              amount,
+            },
+          });
         } catch (err) {
           console.error(
             "Error creating order after payment:",
@@ -116,8 +148,8 @@ const handleBuyNow = async () => {
         }
       },
       prefill: {
-        name: user?._doc?.username || "",
-        email: user?._doc?.email || "",
+        name: hydratedUser?.username || "",
+        email: hydratedUser?.email || "",
       },
       theme: {
         color: "#121212",
@@ -156,27 +188,26 @@ const handleBuyNow = async () => {
     <>
       <NavBar />
 
-      <div className="container mt-4">
-        <h2 className="text-center mb-4">Your Cart</h2>
+      <div className="cart-wrapper mt-4">
+        <h2 className="cart-heading text-center mb-4">Your Cart</h2>
 
         {cart.items.map((item) => (
           <Card className="cart-card mb-3" key={item._id}>
-            <div className="d-flex p-3 justify-content-between align-items-center">
-
-              <div className="d-flex align-items-center">
+            <div className="cart-item-row d-flex p-3 justify-content-between align-items-center">
+              <div className="cart-item-left d-flex align-items-center">
                 <img
                   src={item.productId.imageURL}
                   className="cart-img"
                   alt=""
                 />
 
-                <div className="ms-3">
+                <div className="cart-item-details ms-3">
                   <h5 className="cart-title">{item.productId.title}</h5>
-                  <p className="text-muted mb-0">₹{item.productId.price}</p>
+                  <p className="cart-price mb-0">₹{item.productId.price}</p>
                 </div>
               </div>
 
-              <div className="d-flex align-items-center">
+              <div className="cart-item-right d-flex align-items-center">
                 <Button
                   variant="secondary"
                   className="quantity-btn"
@@ -201,7 +232,7 @@ const handleBuyNow = async () => {
 
                 <Button
                   variant="danger"
-                  className="ms-4 remove-btn"
+                  className="remove-btn"
                   onClick={() => handleRemove(item.productId._id)}
                 >
                   Remove
@@ -212,11 +243,13 @@ const handleBuyNow = async () => {
         ))}
 
         {/* Total + Buy Now */}
-        <Card className="total-card p-3 mt-4 d-flex justify-content-between align-items-center">
-          <h4>Total: ₹{totalPrice}</h4>
-          <Button variant="success" onClick={handleBuyNow}>
-            Buy Now
-          </Button>
+        <Card className="total-card p-3 mt-4">
+          <div className="cart-total-row d-flex justify-content-between align-items-center">
+            <h4>Total: ₹{totalPrice}</h4>
+            <Button variant="success" className="placeorder-button" onClick={handleBuyNow}>
+              Buy Now
+            </Button>
+          </div>
         </Card>
 
       </div>

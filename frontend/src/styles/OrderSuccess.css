@@ -1,0 +1,121 @@
+.order-success-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: calc(100vh - 80px);
+  padding: 3rem 1.5rem;
+  background: radial-gradient(circle at top, #e0f4ff, #f6f9ff);
+}
+
+.order-success-card {
+  background: #fff;
+  border-radius: 28px;
+  padding: 2.5rem 3rem;
+  max-width: 520px;
+  width: 100%;
+  text-align: center;
+  box-shadow: 0 35px 80px rgba(15, 23, 42, 0.12);
+  position: relative;
+  overflow: hidden;
+}
+
+.order-success-card::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: 28px;
+  pointer-events: none;
+  border: 1px solid rgba(13, 110, 253, 0.08);
+}
+
+.order-success-icon {
+  width: 80px;
+  height: 80px;
+  border-radius: 50%;
+  margin: 0 auto 1.5rem;
+  background: linear-gradient(135deg, #16a34a, #4ade80);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #fff;
+  font-size: 2rem;
+  font-weight: 700;
+  box-shadow: 0 15px 30px rgba(22, 163, 74, 0.35);
+}
+
+.order-success-card h2 {
+  margin-bottom: 0.25rem;
+  font-size: 1.8rem;
+}
+
+.order-success-subtitle {
+  color: #475467;
+  font-size: 1rem;
+  margin-bottom: 1rem;
+}
+
+.order-success-meta {
+  margin: 1.5rem 0;
+  padding: 1.2rem;
+  border-radius: 16px;
+  background-color: #f8fafc;
+  text-align: left;
+  font-size: 1rem;
+  border: 1px solid rgba(15, 23, 42, 0.05);
+}
+
+.order-success-meta p {
+  margin: 0.25rem 0;
+}
+
+.order-success-hint {
+  color: #6b7280;
+  margin-top: 0.5rem;
+}
+
+.order-success-actions {
+  display: flex;
+  gap: 1rem;
+  justify-content: center;
+  margin-top: 2rem;
+}
+
+.order-success-actions button {
+  border: none;
+  border-radius: 999px;
+  padding: 0.85rem 2.25rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+  background: linear-gradient(135deg, #0d6efd, #3b82f6);
+  color: #fff;
+  box-shadow: 0 15px 30px rgba(13, 110, 253, 0.35);
+}
+
+.order-success-actions button.secondary {
+  background: transparent;
+  color: #0f172a;
+  border: 1px solid rgba(15, 23, 42, 0.12);
+  box-shadow: none;
+}
+
+.order-success-actions button:hover {
+  transform: translateY(-2px);
+}
+
+@media (max-width: 576px) {
+  .order-success-card {
+    padding: 2rem;
+    border-radius: 22px;
+  }
+
+  .order-success-actions {
+    flex-direction: column;
+  }
+
+  .order-success-actions button,
+  .order-success-actions button.secondary {
+    width: 100%;
+  }
+}
+

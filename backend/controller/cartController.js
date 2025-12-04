@@ -80,9 +80,24 @@ const getCart = async (req, res) => {
   }
 };
 
+const clearCart = async (req, res) => {
+  try {
+    const { userId } = req.body;
+    const cart = await Cart.findOneAndUpdate(
+      { userId },
+      { $set: { items: [] } },
+      { new: true }
+    );
+    res.json(cart);
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
+};
+
 module.exports = {
   addToCart,
   removeFromCart,
   updateQuantity,
-  getCart
+  getCart,
+  clearCart
 };
