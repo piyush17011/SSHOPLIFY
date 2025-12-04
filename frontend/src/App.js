@@ -10,6 +10,7 @@ import Cart from './components/Cart';
 import AllProducts from './components/AllProducts';
 import SingleProductPage from './components/SingleProductPage';
 import Orders from './components/Orders';
+import OrderSuccess from './components/OrderSuccess';
 import { AuthContext } from './auth/AuthContext';
 import { useContext } from 'react'; 
 
@@ -39,7 +40,8 @@ const ValidateRoute = ({ children }) => {
         <Route path="/about" element={<About />} />
         <Route path="/single/:id" element={<SingleProductPage />}></Route>
         <Route path="/allproducts" element={<AllProducts/>}></Route>
-        <Route path="/orders" element={<Orders/>}></Route>   
+        <Route path="/orders" element={<Orders/>}></Route>
+        <Route path="/order-success" element={<ValidateRoute><OrderSuccess /></ValidateRoute>} />
       </Routes>
     </Router>
  

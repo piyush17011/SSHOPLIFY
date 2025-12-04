@@ -1,4 +1,4 @@
 an e-commerce website for sneaker heads built using MERN stack
-for setup create a .env file defining mongo_URL and npm install in both folders
+For setup create an `.env` file defining `MONGO_URL` (Mongo connection string) and `JWT_SECRET` (token signing key) inside the backend folder. You can copy `backend/env.example` as a starting point. Run `npm install` in both frontend and backend folders.
 
 live : https://sshoplify-frontend.onrender.com 

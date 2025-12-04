@@ -14,7 +14,8 @@ import '../styles/NavBar.css';
 
 const NavBar = () => {
   const { user, dispatch } = useContext(AuthContext);
-  const userId = user?._doc?._id;   // SAFE
+  const hydratedUser = user?._doc ?? user;
+  const userId = hydratedUser?._id;
   const navigate = useNavigate();
 
   const [cartCount, setCartCount] = useState(0);
@@ -70,8 +71,8 @@ const NavBar = () => {
 
             {/* CART ICON - CSS UNCHANGED */}
             <div>
-              <Link
-                to={user ? "/cart" : "/login"}
+            <Link
+                to={hydratedUser ? "/cart" : "/login"}
                 className="nav-text"
               >
                 <RiShoppingCartLine className="cart-icon" />
@@ -82,21 +83,21 @@ const NavBar = () => {
             </div>
 
             {/* ORDERS ICON */}
-            <Link to={user ? "/orders" : "/login"} className="nav-text">
+            <Link to={hydratedUser ? "/orders" : "/login"} className="nav-text">
               <GoInbox className="cart-icon" />
             </Link>
 
             {/* ADMIN PANEL ICON */}
-            {user?._doc?.email === "admin@admin.com" && (
+            {hydratedUser?.email === "admin@admin.com" && (
               <Link to="/admin" className="nav-text">
                 <RiAdminLine className="cart-icon" />
               </Link>
             )}
 
             {/* AUTH BUTTONS */}
-            {user ? (
+            {hydratedUser ? (
               <>
-                <b>{user._doc.username}</b>
+                <b>{hydratedUser?.username ?? "User"}</b>
                 <Button className="nav-login-button" onClick={handleLogoutClick}>
                   Logout
                 </Button>

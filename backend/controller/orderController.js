@@ -1,5 +1,6 @@
 
 const Order = require('../model/orderModel');
+const Cart = require("../model/cartModel");
 
 
 const createOrder = async (req, res) => {
@@ -7,6 +8,12 @@ const createOrder = async (req, res) => {
     try {
       const newProduct = new Order({ userId,orderItems,amount});
       await newProduct.save();
+      // clear cart items for this user
+      await Cart.findOneAndUpdate(
+        { userId },
+        { $set: { items: [] } },
+        { new: true }
+      );
       res.status(201).json(newProduct);
     } catch (err) {
       res.status(400).json({ message: err.message });
